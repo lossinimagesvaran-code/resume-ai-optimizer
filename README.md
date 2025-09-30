@@ -1,10 +1,10 @@
-# 🎯 Resume AI Optimizer - Complete Career Assistant Platform
+# Resume AI Optimizer - Complete Career Assistant Platform
 
 A comprehensive, AI-powered career development platform built with Django that revolutionizes job search preparation. This system combines advanced AI technology with professional career tools to help job seekers create ATS-optimized resumes, generate personalized cover letters, master interview preparation, and even get style recommendations for professional appearance.
 
 ## ✨ Core Features
 
-### 🔍 **Intelligent Resume Analysis & ATS Optimization**
+###  **Intelligent Resume Analysis & ATS Optimization**
 - **Advanced PDF Text Extraction** using PyMuPDF with error handling
 - **AI-Powered Gap Analysis** comparing resume against job descriptions
 - **ATS Compatibility Scoring** with detailed keyword matching
@@ -12,7 +12,7 @@ A comprehensive, AI-powered career development platform built with Django that r
 - **Match Score Calculation** with percentage-based feedback
 - **Session-Based Data Persistence** for seamless user experience
 
-### 🎨 **AI-Powered Resume Tailoring System**
+###  **AI-Powered Resume Tailoring System**
 - **3 Professional Templates**: Traditional, Modern, and Hybrid layouts
 - **Intelligent Content Rewriting** using Google Gemini 2.0 Flash
 - **Dynamic Keyword Integration** from job descriptions
@@ -20,14 +20,14 @@ A comprehensive, AI-powered career development platform built with Django that r
 - **Multi-Format Export**: TXT and PDF with professional formatting
 - **Template-Specific Formatting** with visual consistency
 
-### 📝 **Smart Cover Letter Generator**
+###  **Smart Cover Letter Generator**
 - **AI-Driven Personalization** based on resume and job requirements
 - **Company-Specific Customization** with role-targeted content
 - **Multiple Writing Styles** and professional focus areas
 - **Professional Template System** with consistent formatting
 - **Export Capabilities** with PDF generation
 
-### 🎓 **Progressive Interview Preparation System**
+###  **Progressive Interview Preparation System**
 - **3-Level Gamified Learning**: Essential → Advanced → Expert
 - **AI-Powered Interview Coaching** with personalized tips
 - **Interactive Chat Interface** with context-aware responses
@@ -35,64 +35,64 @@ A comprehensive, AI-powered career development platform built with Django that r
 - **Tip Management System** with database persistence
 - **PDF Export** for comprehensive preparation guides
 
-### 👔 **AI Style & Fashion Advisory (Bonus Feature)**
+###  **AI Style & Fashion Advisory (Bonus Feature)**
 - **Computer Vision Skin Tone Analysis** using OpenCV
 - **AI-Powered Style Recommendations** with 10,000+ fashion products
 - **Professional Color Palette Suggestions** based on skin analysis
 - **Fashion Dataset Integration** with CSV-based product database
 - **Image Processing** for personalized styling advice
 
-## 🏗️ Complete Technology Stack
+##  Complete Technology Stack
 
-### **🖥️ Backend Framework**
+### ** Backend Framework**
 - **Django 4.2.7** - Main web framework with MVC architecture
 - **Python 3.8+** - Core programming language
 - **Django ORM** - Database abstraction layer
 - **Django Sessions** - User session management
 - **Django Messages** - User feedback system
 
-### **🤖 AI & LLM Integration**
+### ** AI & LLM Integration**
 - **Google Gemini 2.0 Flash** - Primary AI engine for content generation
 - **google-generativeai 0.3.2** - Official Google AI SDK
 - **Custom Prompt Engineering** - Structured prompts for consistent output
 - **Context-Aware AI Responses** - Resume and job description context integration
 - **No LangChain** - Direct API integration for optimal performance
 
-### **🗄️ Database & Data Management**
+### ** Database & Data Management**
 - **SQLite** - Development database (production-ready)
 - **PostgreSQL/MySQL Support** - Configurable for production
 - **Django Migrations** - Database schema management
 - **Model Relationships** - Foreign keys and data integrity
 - **Session Storage** - Temporary data persistence
 
-### **📄 NLP & File Processing**
+### ** NLP & File Processing**
 - **PyMuPDF (fitz) 1.23.8** - PDF text extraction and processing
 - **FPDF2 2.7.6** - PDF generation and formatting
 - **Pillow 10.1.0** - Image processing for skin tone analysis
 - **OpenCV Integration** - Computer vision for style recommendations
 - **Text Processing** - Custom content cleaning and formatting
 
-### **🎨 Frontend & UI Framework**
+### ** Frontend & UI Framework**
 - **Bootstrap 5** - Responsive CSS framework
 - **HTML5/CSS3** - Modern web standards
 - **JavaScript (Vanilla)** - Interactive functionality
 - **Django Crispy Forms** - Enhanced form rendering
 - **crispy-bootstrap5 0.7** - Bootstrap 5 integration
 
-### **🔧 Additional Libraries & Tools**
+### ** Additional Libraries & Tools**
 - **python-dotenv 1.0.0** - Environment variable management
 - **django-environ 0.11.2** - Settings configuration
 - **whitenoise 6.6.0** - Static file serving
 - **gunicorn 21.2.0** - Production WSGI server
 - **django-allauth 0.57.0** - Authentication system (optional)
 
-### **💻 Operating System Compatibility**
+### ** Operating System Compatibility**
 - **Windows** - Primary development and testing environment
 - **Linux** - Production deployment ready
 - **macOS** - Cross-platform compatibility
 - **Docker Support** - Containerization ready
 
-## 📋 System Requirements
+##  System Requirements
 
 - **Python 3.8+** (Tested on Python 3.11)
 - **Google Gemini API Key** (Required for AI features)
@@ -100,7 +100,7 @@ A comprehensive, AI-powered career development platform built with Django that r
 - **10MB+ Storage** for media files and database
 - **Modern Web Browser** (Chrome, Firefox, Safari, Edge)
 
-## 🚀 Quick Start Installation
+##  Quick Start Installation
 
 ### 1. Clone the Repository
 ```bash
@@ -165,17 +165,17 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 
-🌐 **Access the application at:** `http://127.0.0.1:8000/`
+ **Access the application at:** `http://127.0.0.1:8000/`
 
-## ⚙️ Advanced Configuration
+##  Advanced Configuration
 
-### 🔑 Google Gemini AI API Setup
+###  Google Gemini AI API Setup
 1. **Visit** [Google AI Studio](https://makersuite.google.com/app/apikey)
 2. **Create** a new API key
 3. **Add** the key to your `.env` file as `GOOGLE_API_KEY`
 4. **Test** the connection by running the application
 
-### 🗄️ Database Configuration Options
+###  Database Configuration Options
 
 **Development (Default - SQLite):**
 ```python
@@ -215,16 +215,16 @@ DATABASES = {
 }
 ```
 
-## 📱 Complete User Guide
+##  Complete User Guide
 
-### 🔍 **Step 1: Resume Analysis**
+###  **Step 1: Resume Analysis**
 1. **Upload** your PDF resume (supports multiple formats)
 2. **Paste** the target job description
 3. **Click** "Analyze Resume" to get AI-powered insights
 4. **Review** match score, keyword analysis, and improvement suggestions
 5. **Use** the analysis data for subsequent features
 
-### 🎨 **Step 2: Resume Tailoring**
+###  **Step 2: Resume Tailoring**
 1. **Select** from 3 professional templates:
    - **Traditional**: Linear layout with clear sections
    - **Modern**: Spaced-out design with creative elements
@@ -234,14 +234,14 @@ DATABASES = {
 4. **Preview** and edit the generated content
 5. **Download** in TXT or PDF format
 
-### 📝 **Step 3: Cover Letter Generation**
+###  **Step 3: Cover Letter Generation**
 1. **Input** personal and company information
 2. **Select** writing style and focus areas
 3. **Generate** AI-personalized cover letter
 4. **Review** and edit the generated content
 5. **Export** as PDF for applications
 
-### 🎓 **Step 4: Interview Preparation**
+###  **Step 4: Interview Preparation**
 1. **Generate** Level 1 essential tips (5 tips)
 2. **Complete** tips by checking them off
 3. **Unlock** Level 2 advanced tips
@@ -249,13 +249,13 @@ DATABASES = {
 5. **Use** AI chat coach for specific questions
 6. **Download** comprehensive preparation guide
 
-### 👔 **Bonus: Style Advisory**
+###  **Bonus: Style Advisory**
 1. **Upload** a photo for skin tone analysis
 2. **Get** AI-powered color palette recommendations
 3. **Browse** curated fashion suggestions
 4. **Apply** professional styling advice
 
-## 🏗️ Detailed Project Architecture
+##  Detailed Project Architecture
 
 ```
 ResumeOptimiser/
@@ -316,9 +316,9 @@ ResumeOptimiser/
 └── 📄 manage.py                  # Django management
 ```
 
-## 🎨 Customization & Extension Guide
+##  Customization & Extension Guide
 
-### 📝 Adding New Resume Templates
+###  Adding New Resume Templates
 ```python
 # In resume_tailoring/utils.py
 TEMPLATES = {
@@ -335,7 +335,7 @@ TEMPLATES = {
 }
 ```
 
-### 🤖 Customizing AI Prompts
+###  Customizing AI Prompts
 **Resume Analysis Prompts:**
 ```python
 # In resume_analysis/utils.py
@@ -358,7 +358,7 @@ def generate_interview_tips(resume_text, job_description, level):
     }
 ```
 
-### 🎨 UI/UX Customization
+###  UI/UX Customization
 **Custom Styling:**
 ```css
 /* In static/css/style.css */
@@ -378,16 +378,16 @@ function customFeature() {
 }
 ```
 
-### 🔌 Adding New Features
+###  Adding New Features
 1. **Create new Django app**: `python manage.py startapp your_feature`
 2. **Add to INSTALLED_APPS** in settings.py
 3. **Create models, views, templates**
 4. **Add URL patterns**
 5. **Update navigation** in base.html
 
-## 🚀 Production Deployment Guide
+##  Production Deployment Guide
 
-### 🔧 Production Configuration
+###  Production Configuration
 ```env
 # Production Environment Variables
 DEBUG=False
@@ -409,7 +409,7 @@ SECURE_HSTS_INCLUDE_SUBDOMAINS=True
 SECURE_HSTS_PRELOAD=True
 ```
 
-### 🐳 Docker Deployment
+###  Docker Deployment
 **Dockerfile:**
 ```dockerfile
 FROM python:3.11-slim
@@ -477,7 +477,7 @@ volumes:
   static_volume:
 ```
 
-### ☁️ Cloud Deployment Options
+###  Cloud Deployment Options
 
 **Heroku Deployment:**
 ```bash
@@ -513,7 +513,7 @@ sudo systemctl enable nginx
 gunicorn --bind 0.0.0.0:8000 resume_optimizer.wsgi:application
 ```
 
-## 🧪 Testing & Quality Assurance
+##  Testing & Quality Assurance
 
 ### Running Tests
 ```bash
@@ -545,57 +545,7 @@ isort .
 flake8 .
 ```
 
-## 🤝 Contributing Guidelines
-
-### Development Setup
-1. **Fork** the repository
-2. **Clone** your fork: `git clone your-fork-url`
-3. **Create** feature branch: `git checkout -b feature/your-feature`
-4. **Install** development dependencies: `pip install -r requirements-dev.txt`
-5. **Make** your changes with tests
-6. **Run** tests and quality checks
-7. **Submit** pull request
-
-### Code Standards
-- **Follow PEP 8** Python style guidelines
-- **Write tests** for new features
-- **Document** your code with docstrings
-- **Use meaningful** commit messages
-- **Update README** if needed
-
-## 📊 Performance & Monitoring
-
-### Performance Optimization
-- **Database indexing** on frequently queried fields
-- **Caching** with Redis for production
-- **Static file compression** with WhiteNoise
-- **Image optimization** for style advisor
-- **API rate limiting** for AI calls
-
-### Monitoring Setup
-```python
-# In settings.py for production
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'file': {
-            'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'filename': 'resume_optimizer.log',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['file'],
-            'level': 'INFO',
-            'propagate': True,
-        },
-    },
-}
-```
-
-## 🔒 Security Considerations
+##  Security Considerations
 
 - **API Key Protection**: Never commit API keys to version control
 - **Input Validation**: All user inputs are validated and sanitized
@@ -604,7 +554,7 @@ LOGGING = {
 - **SQL Injection Prevention**: Using Django ORM exclusively
 - **XSS Protection**: Template auto-escaping enabled
 
-## 🆘 Support & Troubleshooting
+##  Support & Troubleshooting
 
 ### Common Issues
 **API Key Errors:**
@@ -627,7 +577,5 @@ LOGGING = {
 
 ## 🎯 **Project Status: Production Ready**
 
-**Built with ❤️ using Django and cutting-edge AI technology to revolutionize job search preparation and help career seekers succeed in today's competitive market.**
-
-**⭐ Star this repository if it helped you land your dream job!**
+**Built using Django and cutting-edge AI technology to revolutionize job search preparation and help career seekers succeed in today's competitive market.**
 
