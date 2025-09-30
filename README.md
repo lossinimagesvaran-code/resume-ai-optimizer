@@ -604,12 +604,6 @@ LOGGING = {
 - **SQL Injection Prevention**: Using Django ORM exclusively
 - **XSS Protection**: Template auto-escaping enabled
 
-## 📄 License & Legal
-
-**MIT License** - This project is open source and free to use.
-
-**AI Usage Disclaimer**: This application uses Google Gemini AI for content generation. Users are responsible for reviewing and validating all AI-generated content before use in professional applications.
-
 ## 🆘 Support & Troubleshooting
 
 ### Common Issues
@@ -628,44 +622,6 @@ LOGGING = {
 - Check database permissions
 - Verify database connection settings
 
-### Getting Help
-- 📧 **Create an issue** in the repository
-- 📚 **Check documentation** and code comments
-- 🔍 **Search existing issues** for solutions
-- 💬 **Join community discussions**
-
-## 🔮 Roadmap & Future Enhancements
-
-### Version 2.0 Planned Features
-- 🌍 **Multi-language Support** (Spanish, French, German)
-- 📊 **Advanced Analytics Dashboard** with usage metrics
-- 🔗 **Job Board Integration** (LinkedIn, Indeed, Glassdoor)
-- 📱 **Mobile App** (React Native)
-- 🤖 **Advanced AI Models** (GPT-4, Claude integration)
-- 👥 **Team Collaboration** features
-- 🎯 **Industry-Specific Templates**
-- 📈 **A/B Testing** for resume effectiveness
-
-### Version 1.1 Minor Updates
-- 🔄 **Bulk Resume Processing**
-- 📝 **Custom Template Builder**
-- 🎨 **Theme Customization**
-- 📊 **Export Analytics**
-- 🔔 **Email Notifications**
-
-## 🙏 Acknowledgments & Credits
-
-### Technology Partners
-- 🤖 **Google Gemini AI** - Advanced language processing
-- 🐍 **Django Community** - Excellent web framework
-- 🎨 **Bootstrap Team** - Responsive UI components
-- 📄 **PyMuPDF** - PDF processing capabilities
-- 🖼️ **OpenCV** - Computer vision for style analysis
-
-### Contributors
-- **Core Development Team**
-- **Beta Testers & Feedback Providers**
-- **Open Source Community**
 
 ---
 
