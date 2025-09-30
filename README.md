@@ -1,5 +1,4 @@
-# Resume AI Optimizer - Complete Career Assistant Platform
-
+# Resume AI Optimizer
 A comprehensive, AI-powered career development platform built with Django that revolutionizes job search preparation. This system combines advanced AI technology with professional career tools to help job seekers create ATS-optimized resumes, generate personalized cover letters, master interview preparation, and even get style recommendations for professional appearance.
 
 ## ✨ Core Features
