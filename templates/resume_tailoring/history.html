@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Tailoring History - Resume AI Optimizer{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body p-5">
+                    <h1 class="text-center mb-4">
+                        <i class="fas fa-history me-2"></i>Tailoring History
+                    </h1>
+                    
+                    {% if tailored_resumes %}
+                        <div class="row">
+                            {% for resume in tailored_resumes %}
+                            <div class="col-md-6 mb-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ resume.template_used|title }} Template</h5>
+                                        <p class="card-text">
+                                            <small class="text-muted">Created: {{ resume.created_at|date:"M d, Y" }}</small><br>
+                                            Match Score: <span class="badge bg-primary">{{ resume.match_score }}%</span>
+                                        </p>
+                                        <a href="{% url 'resume_tailoring:preview' resume.id %}" class="btn btn-primary btn-sm">
+                                            <i class="fas fa-eye me-1"></i>View
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-magic fa-3x text-muted mb-3"></i>
+                            <h3>No Tailored Resumes</h3>
+                            <p class="text-muted">You haven't created any tailored resumes yet.</p>
+                            <a href="{% url 'resume_tailoring:home' %}" class="btn btn-primary">
+                                <i class="fas fa-plus me-2"></i>Create Tailored Resume
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

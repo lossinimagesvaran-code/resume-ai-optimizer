@@ -1,0 +1,721 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}AI Stylist - Resume AI Optimizer{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* AI Stylist specific styles that preserve the chat interface */
+    .stylist-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+    
+    .stylist-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+    
+    .stylist-header h1 {
+        color: var(--primary-color);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    
+    .stylist-header p {
+        color: var(--gray-color);
+        font-size: 1.1rem;
+    }
+    
+    /* Chat interface styles - preserved from original */
+    .chat-interface {
+        display: flex;
+        gap: 2rem;
+        height: 80vh;
+        background: white;
+        border-radius: 1rem;
+        box-shadow: var(--shadow-lg);
+        overflow: hidden;
+    }
+    
+    .sidebar {
+        width: 350px;
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        color: white;
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .sidebar h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+    
+    .upload-section {
+        border: 2px dashed rgba(255, 255, 255, 0.3);
+        border-radius: 1rem;
+        padding: 2rem;
+        text-align: center;
+        margin-bottom: 2rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .upload-section:hover, .upload-section.dragover {
+        border-color: rgba(255, 255, 255, 0.6);
+        background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .upload-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        opacity: 0.7;
+    }
+    
+    .gender-selection {
+        margin-bottom: 2rem;
+    }
+    
+    .gender-selection h3 {
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .gender-buttons {
+        display: flex;
+        gap: 0.5rem;
+    }
+    
+    .gender-btn {
+        flex: 1;
+        padding: 0.75rem;
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        border-radius: 0.5rem;
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .gender-btn.active, .gender-btn:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-2px);
+    }
+    
+    .analysis-result {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 0.75rem;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.5s ease;
+    }
+    
+    .analysis-result.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    
+    .tone-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 1rem;
+    }
+    
+    .tone-badge {
+        background: rgba(255, 255, 255, 0.3);
+        padding: 0.5rem 1rem;
+        border-radius: 1rem;
+        font-size: 0.9rem;
+        text-transform: capitalize;
+    }
+    
+    .main-chat {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        background: var(--light-color);
+    }
+    
+    .chat-header {
+        background: white;
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid var(--border-color);
+        text-align: center;
+    }
+    
+    .chat-header h3 {
+        color: var(--dark-color);
+        margin: 0;
+    }
+    
+    .chat-messages {
+        flex: 1;
+        padding: 1rem 2rem;
+        overflow-y: auto;
+        background: var(--light-color);
+        max-height: calc(80vh - 120px);
+    }
+    
+    .message {
+        margin-bottom: 2rem;
+        display: flex;
+        gap: 1rem;
+        animation: fadeInUp 0.5s ease;
+    }
+    
+    .message.ai {
+        justify-content: flex-start;
+    }
+    
+    .message-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--primary-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        flex-shrink: 0;
+    }
+    
+    .message-content {
+        flex: 1;
+        background: white;
+        padding: 1.5rem;
+        border-radius: 1rem;
+        box-shadow: var(--shadow);
+        max-width: 85%;
+    }
+    
+    .message-content p {
+        margin: 0 0 1rem 0;
+        line-height: 1.6;
+    }
+    
+    .message-content p:last-child {
+        margin-bottom: 0;
+    }
+    
+    .recommendations-grid {
+        display: grid;
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+    }
+    
+    .outfit-card {
+        background: var(--light-color);
+        border: 1px solid var(--border-color);
+        border-radius: 1rem;
+        padding: 1.5rem;
+        transition: all 0.3s ease;
+    }
+    
+    .outfit-card:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-lg);
+    }
+    
+    .outfit-items {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .outfit-item {
+        text-align: center;
+    }
+    
+    .item-image {
+        width: 100%;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .item-name {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--dark-color);
+        margin-bottom: 0.25rem;
+    }
+    
+    .item-brand {
+        font-size: 0.8rem;
+        color: var(--gray-color);
+    }
+    
+    .outfit-explanation {
+        background: rgba(99, 102, 241, 0.1);
+        padding: 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+    
+    .outfit-compliment {
+        color: var(--success-color);
+        font-weight: 600;
+        font-style: italic;
+        margin-bottom: 1rem;
+    }
+    
+    .feedback-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+    }
+    
+    .feedback-btn {
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .like-btn {
+        background: var(--success-color);
+        color: white;
+    }
+    
+    .like-btn:hover {
+        background: #059669;
+        transform: translateY(-2px);
+    }
+    
+    .dislike-btn {
+        background: var(--gray-color);
+        color: white;
+    }
+    
+    .dislike-btn:hover {
+        background: #4b5563;
+        transform: translateY(-2px);
+    }
+    
+    .loading {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        background: rgba(99, 102, 241, 0.1);
+        border-radius: 0.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .spinner {
+        width: 20px;
+        height: 20px;
+        border: 2px solid var(--border-color);
+        border-top: 2px solid var(--primary-color);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+    
+    .error-message {
+        background: var(--danger-color);
+        color: white;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    /* Responsive design */
+    @media (max-width: 768px) {
+        .chat-interface {
+            flex-direction: column;
+            height: auto;
+        }
+        
+        .sidebar {
+            width: 100%;
+            order: 2;
+        }
+        
+        .main-chat {
+            order: 1;
+            min-height: 60vh;
+        }
+        
+        .stylist-container {
+            padding: 1rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="stylist-container">
+    <div class="stylist-header">
+        <h1><i class="fas fa-tshirt me-3"></i>AI Style Advisor</h1>
+        <p>Get personalized interview outfit recommendations based on your skin tone and style preferences</p>
+    </div>
+    
+    <div class="chat-interface">
+        <div class="sidebar">
+            <h2><i class="fas fa-camera me-2"></i>Upload Your Photo</h2>
+            
+            <div class="upload-section" id="uploadSection">
+                <div class="upload-icon">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </div>
+                <p><strong>Drag & drop</strong> your photo here<br>or <strong>click to browse</strong></p>
+                <small>Supported: JPG, PNG, GIF (Max 10MB)</small>
+                <input type="file" id="fileInput" accept="image/*" style="display: none;">
+            </div>
+            
+            <div class="gender-selection">
+                <h3><i class="fas fa-user me-2"></i>Select Gender</h3>
+                <div class="gender-buttons">
+                    <button class="gender-btn active" data-gender="Men">Men</button>
+                    <button class="gender-btn" data-gender="Women">Women</button>
+                </div>
+            </div>
+            
+            <div class="analysis-result" id="analysisResult">
+                <h4><i class="fas fa-palette me-2"></i>Your Skin Analysis</h4>
+                <div class="tone-badges" id="skinToneDisplay">
+                    <!-- Skin tone badges will be inserted here -->
+                </div>
+            </div>
+        </div>
+        
+        <div class="main-chat">
+            <div class="chat-header">
+                <h3><i class="fas fa-comments me-2"></i>Style Consultation</h3>
+            </div>
+            
+            <div class="chat-messages" id="chatMessages">
+                <div class="message ai">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <p>Hello! I'm your personal AI Style Advisor. I specialize in helping people find the perfect professional outfits for interviews based on their skin tone and personal style.</p>
+                        <p>To get started, please upload a clear photo of yourself so I can analyze your skin tone and recommend colors that will make you look confident and professional!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    class StyleAdvisorApp {
+        constructor() {
+            this.sessionId = null;
+            this.selectedGender = 'Men';
+            this.currentRecommendations = [];
+            this.initializeEventListeners();
+        }
+
+        initializeEventListeners() {
+            // File upload
+            const fileInput = document.getElementById('fileInput');
+            const uploadSection = document.getElementById('uploadSection');
+
+            fileInput.addEventListener('change', (e) => this.handleFileSelect(e));
+            
+            // Make upload section clickable
+            uploadSection.addEventListener('click', () => fileInput.click());
+            
+            // Drag and drop
+            uploadSection.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadSection.classList.add('dragover');
+            });
+
+            uploadSection.addEventListener('dragleave', () => {
+                uploadSection.classList.remove('dragover');
+            });
+
+            uploadSection.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadSection.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    this.processImage(files[0]);
+                }
+            });
+
+            // Gender selection
+            document.querySelectorAll('.gender-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    document.querySelectorAll('.gender-btn').forEach(b => b.classList.remove('active'));
+                    e.target.classList.add('active');
+                    this.selectedGender = e.target.dataset.gender;
+                });
+            });
+        }
+
+        handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                this.processImage(file);
+            }
+        }
+
+        async processImage(file) {
+            if (!file.type.startsWith('image/')) {
+                this.showError('Please select a valid image file.');
+                return;
+            }
+
+            this.showLoading('Analyzing your skin tone...');
+
+            try {
+                const base64Image = await this.fileToBase64(file);
+                const response = await fetch('/stylist/api/analyze-skin-tone/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': this.getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({
+                        image: base64Image,
+                        gender: this.selectedGender
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    this.sessionId = data.session_id;
+                    this.displaySkinAnalysis(data.analysis);
+                    this.addAIMessage(data.greeting);
+                    this.getRecommendations();
+                } else {
+                    this.showError(data.error || 'Failed to analyze skin tone');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                this.showError('An error occurred while analyzing your photo.');
+            }
+        }
+
+        async getRecommendations() {
+            if (!this.sessionId) return;
+
+            this.showLoading('Finding perfect outfits for you...');
+
+            try {
+                const response = await fetch('/stylist/api/get-recommendations/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': this.getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({
+                        session_id: this.sessionId
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    this.currentRecommendations = data.recommendations;
+                    this.addAIMessage(data.message);
+                    this.displayRecommendations(data.recommendations);
+                } else {
+                    this.showError(data.error || 'Failed to get recommendations');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                this.showError('An error occurred while getting recommendations.');
+            }
+        }
+
+        displaySkinAnalysis(analysis) {
+            const analysisResult = document.getElementById('analysisResult');
+            const skinToneDisplay = document.getElementById('skinToneDisplay');
+            
+            skinToneDisplay.innerHTML = `
+                <div class="tone-badge">${analysis.skin_tone.replace('_', ' ')}</div>
+                <div class="tone-badge">${analysis.season}</div>
+                <div class="tone-badge">${analysis.undertone}</div>
+            `;
+            
+            analysisResult.classList.add('show');
+        }
+
+        displayRecommendations(recommendations) {
+            const recommendationsHtml = recommendations.map(outfit => `
+                <div class="outfit-card">
+                    <div class="outfit-items">
+                        ${outfit.items.slice(0, 4).map(item => `
+                            <div class="outfit-item">
+                                <img src="${item.image_url}" alt="${item.name}" class="item-image" 
+                                     onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2Y3ZmFmYyIvPjx0ZXh0IHg9IjUwIiB5PSI1MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjEyIiBmaWxsPSIjNjQ3NDhiIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+Tm8gSW1hZ2U8L3RleHQ+PC9zdmc+'">
+                                <div class="item-name">${item.name.substring(0, 30)}...</div>
+                                <div class="item-brand">${item.brand}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div class="outfit-explanation">
+                        <strong>Why this works:</strong> ${outfit.explanation}
+                    </div>
+                    
+                    <div class="outfit-compliment">
+                        ${outfit.compliment}
+                    </div>
+                    
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn" onclick="app.submitFeedback('${outfit.outfit_id}', true)">
+                            <i class="fas fa-thumbs-up"></i> Love it!
+                        </button>
+                        <button class="feedback-btn dislike-btn" onclick="app.submitFeedback('${outfit.outfit_id}', false)">
+                            <i class="fas fa-thumbs-down"></i> Not for me
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            this.addAIMessage('', recommendationsHtml);
+        }
+
+        async submitFeedback(outfitId, liked) {
+            if (!this.sessionId) return;
+
+            try {
+                const response = await fetch('/stylist/api/submit-feedback/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': this.getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({
+                        session_id: this.sessionId,
+                        outfit_id: outfitId,
+                        liked: liked
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    this.addAIMessage(data.message);
+                    
+                    if (data.alternatives) {
+                        this.addAIMessage(data.alternative_message || 'Here are some alternatives:');
+                        this.displayRecommendations(data.alternatives);
+                    }
+                } else {
+                    this.showError(data.error || 'Failed to submit feedback');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                this.showError('An error occurred while submitting feedback.');
+            }
+        }
+
+        addAIMessage(text, htmlContent = '') {
+            this.hideLoading();
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message ai';
+            
+            messageDiv.innerHTML = `
+                <div class="message-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="message-content">
+                    ${text ? `<p>${text}</p>` : ''}
+                    ${htmlContent ? `<div class="recommendations-grid">${htmlContent}</div>` : ''}
+                </div>
+            `;
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        showLoading(message) {
+            this.hideLoading();
+            const chatMessages = document.getElementById('chatMessages');
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'loading';
+            loadingDiv.id = 'loadingMessage';
+            loadingDiv.innerHTML = `
+                <div class="spinner"></div>
+                <span>${message}</span>
+            `;
+            chatMessages.appendChild(loadingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        hideLoading() {
+            const loadingMessage = document.getElementById('loadingMessage');
+            if (loadingMessage) {
+                loadingMessage.remove();
+            }
+        }
+
+        showError(message) {
+            this.hideLoading();
+            const chatMessages = document.getElementById('chatMessages');
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.textContent = message;
+            chatMessages.appendChild(errorDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+
+        getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    }
+
+    // Initialize the app
+    const app = new StyleAdvisorApp();
+</script>
+{% endblock %}

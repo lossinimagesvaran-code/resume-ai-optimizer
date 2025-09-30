@@ -1,0 +1,235 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home - Resume AI Optimizer{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8 mx-auto text-center">
+                <h1 class="display-4 fw-bold mb-4">
+                    <i class="fas fa-robot me-3"></i>Resume AI Optimizer
+                </h1>
+                <p class="lead mb-4">
+                    Transform your resume with AI-powered analysis, tailoring, and interview preparation. 
+                    Land your dream job with confidence using cutting-edge technology.
+                </p>
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <a href="{% url 'resume_analysis:home' %}" class="btn btn-light btn-lg">
+                        <i class="fas fa-play-circle me-2"></i>Start Now
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="display-5 fw-bold mb-3">Why Choose Resume AI Optimizer?</h2>
+                <p class="lead text-muted">
+                    Our comprehensive platform combines advanced AI technology with proven career strategies 
+                    to give you the competitive edge you need.
+                </p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card fade-in-up">
+                    <div class="feature-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>Smart Analysis</h3>
+                    <p>
+                        AI-powered resume analysis that identifies gaps, matches keywords, and provides 
+                        actionable recommendations to improve your ATS score.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card fade-in-up">
+                    <div class="feature-icon">
+                        <i class="fas fa-magic"></i>
+                    </div>
+                    <h3>AI Tailoring</h3>
+                    <p>
+                        Generate perfectly tailored resumes for specific job descriptions using multiple 
+                        professional templates and AI-powered content optimization.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card fade-in-up">
+                    <div class="feature-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h3>Cover Letters</h3>
+                    <p>
+                        Create compelling, personalized cover letters that highlight your unique 
+                        qualifications and match the job requirements perfectly.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card fade-in-up">
+                    <div class="feature-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3>Interview Prep</h3>
+                    <p>
+                        Progressive interview preparation with personalized tips, AI coaching, and 
+                        gamified learning to build your confidence.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card fade-in-up">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Track Progress</h3>
+                    <p>
+                        Monitor your improvement with detailed analytics, progress tracking, and 
+                        performance insights to optimize your job search strategy.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card fade-in-up">
+                    <div class="feature-icon">
+                        <i class="fas fa-tshirt"></i>
+                    </div>
+                    <h3>AI Stylist</h3>
+                    <p>
+                        Get personalized interview outfit recommendations based on your skin tone and 
+                        professional style preferences to make the perfect first impression.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card fade-in-up">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Privacy First</h3>
+                    <p>
+                        Your data is secure and private. We use enterprise-grade security to protect 
+                        your personal information and resume content.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="display-5 fw-bold mb-3">How It Works</h2>
+                <p class="lead text-muted">
+                    Get started in minutes with our simple, step-by-step process
+                </p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-lg-2 col-md-4 col-sm-6 text-center">
+                <div class="position-relative">
+                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <span class="h5 mb-0">1</span>
+                    </div>
+                    <h5>Upload & Analyze</h5>
+                    <p class="text-muted small">Upload resume PDF and paste job description for AI analysis</p>
+                </div>
+            </div>
+            
+            <div class="col-lg-2 col-md-4 col-sm-6 text-center">
+                <div class="position-relative">
+                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <span class="h5 mb-0">2</span>
+                    </div>
+                    <h5>View Results</h5>
+                    <p class="text-muted small">Get match scores and improvement recommendations</p>
+                </div>
+            </div>
+            
+            <div class="col-lg-2 col-md-4 col-sm-6 text-center">
+                <div class="position-relative">
+                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <span class="h5 mb-0">3</span>
+                    </div>
+                    <h5>Generate Materials</h5>
+                    <p class="text-muted small">Create tailored resume and cover letter</p>
+                </div>
+            </div>
+            
+            <div class="col-lg-2 col-md-4 col-sm-6 text-center">
+                <div class="position-relative">
+                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <span class="h5 mb-0">4</span>
+                    </div>
+                    <h5>Interview Prep</h5>
+                    <p class="text-muted small">Get AI coaching and practice tips</p>
+                </div>
+            </div>
+            
+            <div class="col-lg-2 col-md-4 col-sm-6 text-center">
+                <div class="position-relative">
+                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <span class="h5 mb-0">5</span>
+                    </div>
+                    <h5>Chat Coach</h5>
+                    <p class="text-muted small">Get personalized guidance from resume coach</p>
+                </div>
+            </div>
+            
+            <div class="col-lg-2 col-md-4 col-sm-6 text-center">
+                <div class="position-relative">
+                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <span class="h5 mb-0">6</span>
+                    </div>
+                    <h5>AI Stylist</h5>
+                    <p class="text-muted small">Get outfit recommendations (accessible anytime)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <div class="card border-0 shadow-lg">
+                    <div class="card-body p-5">
+                        <h2 class="display-6 fw-bold mb-3">Ready to Transform Your Career?</h2>
+                        <p class="lead text-muted mb-4">
+                            Join thousands of professionals who have already improved their job prospects 
+                            with our AI-powered platform.
+                        </p>
+                        <a href="{% url 'resume_analysis:home' %}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-play-circle me-2"></i>Start Optimizing
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

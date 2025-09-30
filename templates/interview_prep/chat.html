@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Interview Coach Chat - Resume AI Optimizer{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body p-5">
+                    <h1 class="text-center mb-4">
+                        <i class="fas fa-robot me-2"></i>Interview Coach Chat
+                    </h1>
+                    <p class="lead text-center text-muted mb-5">
+                        Ask questions and get personalized interview advice from our AI coach.
+                    </p>
+                    
+                    <!-- Chat History -->
+                    {% if chat_history %}
+                    <div class="chat-history mb-4" style="max-height: 400px; overflow-y: auto;">
+                        {% for chat in chat_history %}
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="mb-2">
+                                    <strong><i class="fas fa-user me-2"></i>You:</strong>
+                                    <p class="mb-2">{{ chat.question }}</p>
+                                </div>
+                                <div>
+                                    <strong><i class="fas fa-robot me-2"></i>AI Coach:</strong>
+                                    <p class="mb-0">{{ chat.answer }}</p>
+                                </div>
+                                <small class="text-muted">{{ chat.created_at|date:"M d, Y H:i" }}</small>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Question Form -->
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        
+                        <div class="d-grid mt-3">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane me-2"></i>Ask Coach
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <!-- Clear History -->
+                    {% if chat_history %}
+                    <div class="text-center mt-4">
+                        <form method="post" action="{% url 'interview_prep:clear_chat' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-danger btn-sm">
+                                <i class="fas fa-trash me-2"></i>Clear Chat History
+                            </button>
+                        </form>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

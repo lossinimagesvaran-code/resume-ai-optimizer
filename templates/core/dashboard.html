@@ -1,0 +1,210 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Dashboard - Resume AI Optimizer{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Welcome Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body p-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h1 class="h2 mb-2">Welcome back, {{ user.get_full_name|default:user.username }}!</h1>
+                            <p class="text-muted mb-0">Ready to optimize your career prospects? Let's get started with your next steps.</p>
+                        </div>
+                        <div class="col-md-4 text-md-end">
+                            <a href="{% url 'resume_analysis:home' %}" class="btn btn-primary btn-lg">
+                                <i class="fas fa-plus me-2"></i>New Analysis
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="h3 mb-4">Quick Actions</h2>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100 border-0 shadow">
+                <div class="card-body text-center p-4">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h5 class="card-title">Resume Analysis</h5>
+                    <p class="card-text text-muted">Analyze your resume against job descriptions</p>
+                    <a href="{% url 'resume_analysis:home' %}" class="btn btn-outline-primary">Get Started</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100 border-0 shadow">
+                <div class="card-body text-center p-4">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-magic"></i>
+                    </div>
+                    <h5 class="card-title">Resume Tailoring</h5>
+                    <p class="card-text text-muted">Create tailored resumes for specific jobs</p>
+                    <a href="{% url 'resume_tailoring:home' %}" class="btn btn-outline-primary">Tailor Resume</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100 border-0 shadow">
+                <div class="card-body text-center p-4">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h5 class="card-title">Cover Letters</h5>
+                    <p class="card-text text-muted">Generate personalized cover letters</p>
+                    <a href="{% url 'cover_letter:home' %}" class="btn btn-outline-primary">Create Letter</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100 border-0 shadow">
+                <div class="card-body text-center p-4">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h5 class="card-title">Interview Prep</h5>
+                    <p class="card-text text-muted">Prepare for interviews with AI coaching</p>
+                    <a href="{% url 'interview_prep:home' %}" class="btn btn-outline-primary">Start Prep</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100 border-0 shadow">
+                <div class="card-body text-center p-4">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-tshirt"></i>
+                    </div>
+                    <h5 class="card-title">AI Stylist</h5>
+                    <p class="card-text text-muted">Get interview outfit recommendations</p>
+                    <a href="/stylist/" class="btn btn-outline-primary">Style Me</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="h3 mb-4">Recent Activity</h2>
+            <div class="card border-0 shadow">
+                <div class="card-header">
+                    <h5 class="mb-0">Your Latest Activities</h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_analyses or recent_tailored_resumes or recent_cover_letters %}
+                        {% if recent_analyses %}
+                        <div class="mb-4">
+                            <h6 class="text-primary mb-3">
+                                <i class="fas fa-search me-2"></i>Recent Resume Analyses
+                            </h6>
+                            {% for analysis in recent_analyses|slice:":3" %}
+                            <div class="d-flex justify-content-between align-items-center p-3 border rounded mb-2">
+                                <div>
+                                    <strong>Analysis #{{ analysis.id }}</strong>
+                                    <br><small class="text-muted">Score: {{ analysis.match_score }}/100</small>
+                                </div>
+                                <div class="text-end">
+                                    <small class="text-muted">{{ analysis.created_at|date:"M d, Y" }}</small>
+                                    <br><a href="{% url 'resume_analysis:results' analysis.id %}" class="btn btn-sm btn-outline-primary">View</a>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
+                        {% if recent_tailored_resumes %}
+                        <div class="mb-4">
+                            <h6 class="text-success mb-3">
+                                <i class="fas fa-magic me-2"></i>Recent Tailored Resumes
+                            </h6>
+                            {% for resume in recent_tailored_resumes|slice:":3" %}
+                            <div class="d-flex justify-content-between align-items-center p-3 border rounded mb-2">
+                                <div>
+                                    <strong>{{ resume.get_template_used_display }}</strong>
+                                    <br><small class="text-muted">Score: {{ resume.match_score }}/100</small>
+                                </div>
+                                <div class="text-end">
+                                    <small class="text-muted">{{ resume.created_at|date:"M d, Y" }}</small>
+                                    <br><a href="{% url 'resume_tailoring:preview' resume.id %}" class="btn btn-sm btn-outline-success">View</a>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
+                        {% if recent_cover_letters %}
+                        <div class="mb-4">
+                            <h6 class="text-info mb-3">
+                                <i class="fas fa-envelope me-2"></i>Recent Cover Letters
+                            </h6>
+                            {% for letter in recent_cover_letters|slice:":3" %}
+                            <div class="d-flex justify-content-between align-items-center p-3 border rounded mb-2">
+                                <div>
+                                    <strong>{{ letter.job_title }} at {{ letter.company_name }}</strong>
+                                    <br><small class="text-muted">{{ letter.company_name }}</small>
+                                </div>
+                                <div class="text-end">
+                                    <small class="text-muted">{{ letter.created_at|date:"M d, Y" }}</small>
+                                    <br><a href="{% url 'cover_letter:preview' letter.id %}" class="btn btn-sm btn-outline-info">View</a>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">No Recent Activity</h5>
+                            <p class="text-muted">Start by analyzing your first resume or creating a tailored version!</p>
+                            <a href="{% url 'resume_analysis:home' %}" class="btn btn-primary">Get Started</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Progress Overview -->
+    <div class="row">
+        <div class="col-12">
+            <h2 class="h3 mb-4">Your Progress</h2>
+            <div class="row">
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="stats-card">
+                        <div class="stats-number">{{ total_analyses|default:"0" }}</div>
+                        <div class="stats-label">Resume Analyses</div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="stats-card">
+                        <div class="stats-number">{{ total_tailored_resumes|default:"0" }}</div>
+                        <div class="stats-label">Tailored Resumes</div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="stats-card">
+                        <div class="stats-number">{{ total_cover_letters|default:"0" }}</div>
+                        <div class="stats-label">Cover Letters</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

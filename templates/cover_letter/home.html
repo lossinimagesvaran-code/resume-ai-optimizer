@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Cover Letter Generator - Resume AI Optimizer{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body p-5">
+                    <h1 class="text-center mb-4">
+                        <i class="fas fa-envelope me-2"></i>Cover Letter Generator
+                    </h1>
+                    <p class="lead text-center text-muted mb-5">
+                        Create a personalized cover letter that complements your resume and highlights your fit for the role.
+                    </p>
+                    
+                    {% if recent_analysis %}
+                    <div class="alert alert-info mb-4">
+                        <h6><i class="fas fa-info-circle me-2"></i>Using Recent Analysis</h6>
+                        <p class="mb-0">Match Score: <strong>{{ recent_analysis.match_score }}%</strong> | 
+                        <a href="{% url 'resume_analysis:results' recent_analysis.id %}" class="alert-link">View Details</a></p>
+                    </div>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        
+                        <div class="row mt-4">
+                            <div class="col-md-8">
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-arrow-right me-2"></i>Generate Cover Letter
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="d-grid">
+                                    <a href="{% url 'cover_letter:clear_session' %}" class="btn btn-outline-secondary btn-lg">
+                                        <i class="fas fa-refresh me-2"></i>Clear Session
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    {% else %}
+                    <div class="alert alert-warning text-center">
+                        <h5><i class="fas fa-exclamation-triangle me-2"></i>Analysis Required</h5>
+                        <p>Please complete a resume analysis first to generate a targeted cover letter.</p>
+                        <a href="{% url 'resume_analysis:home' %}" class="btn btn-warning">
+                            <i class="fas fa-search me-2"></i>Start Analysis
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

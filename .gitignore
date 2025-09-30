@@ -1,0 +1,29 @@
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Django stuff
+db.sqlite3
+/staticfiles/
+/media/
+
+# Environment files
+.env
+env_example.txt
+
+# Virtual environment
+venv/
+env/
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+
+# System files
+.DS_Store
+Thumbs.db
+
+# CSV or datasets (optional, like your fashion dataset)
+scraped_fashion_products.csv

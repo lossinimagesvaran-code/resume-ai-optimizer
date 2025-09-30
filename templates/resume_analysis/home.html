@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Resume Analysis - Resume AI Optimizer{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body p-5">
+                    <h1 class="text-center mb-4">
+                        <i class="fas fa-search me-2"></i>Resume Analysis
+                    </h1>
+                    <p class="lead text-center text-muted mb-5">
+                        Upload your resume and job description to get AI-powered analysis and recommendations.
+                    </p>
+                    
+                    <form method="post" enctype="multipart/form-data" id="resume-analysis-form">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="card h-100">
+                                    <div class="card-header bg-primary text-white">
+                                        <h5 class="mb-0"><i class="fas fa-file-pdf me-2"></i>Upload Resume</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        {{ resume_form.resume_file|as_crispy_field }}
+                                        <small class="text-muted">
+                                            <i class="fas fa-info-circle me-1"></i>
+                                            Upload your resume in PDF format (max 10MB)
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-4">
+                                <div class="card h-100">
+                                    <div class="card-header bg-success text-white">
+                                        <h5 class="mb-0"><i class="fas fa-briefcase me-2"></i>Job Description</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        {{ jd_form.job_description|as_crispy_field }}
+                                        <small class="text-muted">
+                                            <i class="fas fa-info-circle me-1"></i>
+                                            Paste the complete job description here
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-magic me-2"></i>Analyze Resume
+                            </button>
+                        </div>
+                    </form>
+                    
+                    {% if recent_analysis %}
+                    <div class="mt-5">
+                        <div class="alert alert-info">
+                            <h6><i class="fas fa-history me-2"></i>Recent Analysis Available</h6>
+                            <p class="mb-2">You have a recent analysis with match score: <strong>{{ recent_analysis.match_score }}%</strong></p>
+                            <a href="{% url 'resume_analysis:results' recent_analysis.id %}" class="btn btn-sm btn-outline-info">
+                                View Results
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- How It Works Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="display-6 fw-bold mb-3">How Resume Analysis Works</h2>
+                <p class="lead text-muted">
+                    Our AI analyzes your resume against job requirements in seconds
+                </p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-lg-3 col-md-6 text-center">
+                <div class="position-relative">
+                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <span class="h3 mb-0">1</span>
+                    </div>
+                    <h4>Upload & Parse</h4>
+                    <p class="text-muted">AI extracts text and key information from your PDF resume</p>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 text-center">
+                <div class="position-relative">
+                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <span class="h3 mb-0">2</span>
+                    </div>
+                    <h4>Match Analysis</h4>
+                    <p class="text-muted">Compare resume content against job description requirements</p>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 text-center">
+                <div class="position-relative">
+                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <span class="h3 mb-0">3</span>
+                    </div>
+                    <h4>Score & Insights</h4>
+                    <p class="text-muted">Get detailed match score and improvement recommendations</p>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 text-center">
+                <div class="position-relative">
+                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <span class="h3 mb-0">4</span>
+                    </div>
+                    <h4>Take Action</h4>
+                    <p class="text-muted">Use insights to tailor resume, write cover letters, and prep for interviews</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

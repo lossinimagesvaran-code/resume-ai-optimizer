@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Clearing Session</title>
+    <script>
+        // Clear all form data and redirect
+        window.onload = function() {
+            // Clear localStorage
+            localStorage.clear();
+            
+            // Clear sessionStorage
+            sessionStorage.clear();
+            
+            // Clear cookies
+            document.cookie.split(";").forEach(function(c) { 
+                document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
+            });
+            
+            // Redirect to cover letter home
+            window.location.href = '/cover-letter/';
+        };
+    </script>
+</head>
+<body>
+    <p>Clearing session data...</p>
+</body>
+</html>

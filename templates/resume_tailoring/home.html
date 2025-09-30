@@ -1,0 +1,196 @@
+{% extends 'base.html' %}
+
+{% block title %}Resume Tailoring - Resume AI Optimizer{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body p-5">
+                    <h1 class="text-center mb-4">
+                        <i class="fas fa-magic me-2"></i>Resume Tailoring
+                    </h1>
+                    <p class="lead text-center text-muted mb-5">
+                        Create a tailored resume optimized for your target job using AI-powered customization.
+                    </p>
+                    
+                    {% if recent_analysis %}
+                    <div class="alert alert-info mb-4">
+                        <h6><i class="fas fa-info-circle me-2"></i>Using Recent Analysis</h6>
+                        <p class="mb-0">Match Score: <strong>{{ recent_analysis.match_score }}%</strong> | 
+                        <a href="{% url 'resume_analysis:results' recent_analysis.id %}" class="alert-link">View Details</a></p>
+                    </div>
+                    
+                    <form method="post" id="template-form">
+                        {% csrf_token %}
+                        
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">🔥 Choose Resume Template* (SESSION CLEARED)</label>
+                            <div class="template-options">
+                                <div class="card mb-3" style="border: 3px solid #0d6efd;" id="traditional-container">
+                                    <div class="card-body">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="template_choice" value="traditional" id="traditional" required>
+                                            <label class="form-check-label" for="traditional" style="cursor: pointer; width: 100%; display: block;">
+                                                <h5 class="text-primary">TRADITIONAL TEMPLATE</h5>
+                                                <p>Linear layout with clear section separators</p>
+                                                <small class="text-muted">Order: Summary → Skills → Experience</small>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card mb-3" style="border: 3px solid #198754;" id="modern-container">
+                                    <div class="card-body">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="template_choice" value="modern" id="modern" required>
+                                            <label class="form-check-label" for="modern" style="cursor: pointer; width: 100%; display: block;">
+                                                <h5 class="text-success">MODERN TEMPLATE</h5>
+                                                <p>Spaced-out layout with creative skill grouping</p>
+                                                <small class="text-muted">Order: Summary → Experience → Skills</small>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card mb-3" style="border: 3px solid #dc3545;" id="hybrid-container">
+                                    <div class="card-body">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="template_choice" value="hybrid" id="hybrid" required>
+                                            <label class="form-check-label" for="hybrid" style="cursor: pointer; width: 100%; display: block;">
+                                                <h5 class="text-danger">HYBRID TEMPLATE</h5>
+                                                <p>Skill-focused layout with flexible structure</p>
+                                                <small class="text-muted">Order: Skills → Summary → Experience</small>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg" id="submit-btn">
+                                <i class="fas fa-arrow-right me-2"></i>Continue to Customization
+                            </button>
+                        </div>
+                    </form>
+                    
+                    {% else %}
+                    <div class="alert alert-warning text-center">
+                        <h5><i class="fas fa-exclamation-triangle me-2"></i>Analysis Required</h5>
+                        <p>Please complete a resume analysis first to enable tailoring.</p>
+                        <a href="{% url 'resume_analysis:home' %}" class="btn btn-warning">
+                            <i class="fas fa-search me-2"></i>Start Analysis
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Prevent browser form caching// Handle page show event (back button)
+window.addEventListener('pageshow', function(event) {
+    if (event.persisted) {
+        // Page was loaded from cache, reset the form
+        document.getElementById('template-form').reset();
+        const radios = document.querySelectorAll('input[name="template_choice"]');
+        radios.forEach(radio => radio.checked = false);
+    }
+});
+
+// Clear form on page load and handle radio buttons
+document.addEventListener('DOMContentLoaded', function() {
+    const radioButtons = document.querySelectorAll('input[name="template_choice"]');
+    const submitButton = document.getElementById('submit-btn');
+    
+    // Force-clear any browser-autofilled values AND fix corrupted values
+    setTimeout(() => {
+        radioButtons.forEach(radio => radio.checked = false);
+        
+        // CRITICAL FIX: Force-reset the values in case they got corrupted
+        const traditionalRadio = document.getElementById('traditional');
+        const modernRadio = document.getElementById('modern');
+        const hybridRadio = document.getElementById('hybrid');
+        
+        if (traditionalRadio) traditionalRadio.value = 'traditional';
+        if (modernRadio) modernRadio.value = 'modern';
+        if (hybridRadio) hybridRadio.value = 'hybrid';
+    }, 100);
+    
+    // Reset button to default state
+    submitButton.innerHTML = '<i class="fas fa-arrow-right me-2"></i>Continue to Customization';
+    submitButton.style.backgroundColor = '#6c757d'; // Gray
+    
+    // Add change listeners to radio buttons
+    radioButtons.forEach((radio) => {
+        radio.addEventListener('change', function() {
+            // CRITICAL FIX: Clear ALL radios first, then set only this one
+            const allRadios = document.querySelectorAll('input[name="template_choice"]');
+            allRadios.forEach(r => {
+                r.checked = false;
+            });
+            
+            // FORCE this radio to be checked
+            this.checked = true;
+            
+            // Update submit button text to show selected template
+            const templateName = this.value.toUpperCase();
+            submitButton.innerHTML = `<i class="fas fa-arrow-right me-2"></i>Continue with ${templateName} Template`;
+            submitButton.style.backgroundColor = getTemplateColor(this.value);
+        });
+    });
+    
+    function getTemplateColor(template) {
+        switch(template) {
+            case 'traditional': return '#0d6efd'; // Blue
+            case 'modern': return '#198754';      // Green  
+            case 'hybrid': return '#dc3545';      // Red
+            default: return '#6c757d';           // Gray
+        }
+    }
+});
+
+// Form submission with validation
+document.getElementById('template-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Get all radio buttons and check which one is actually selected
+    const radioButtons = document.querySelectorAll('input[name="template_choice"]');
+    let selectedTemplate = null;
+    let checkedCount = 0;
+    
+    radioButtons.forEach((radio) => {
+        if (radio.checked) {
+            selectedTemplate = radio.value;
+            checkedCount++;
+        }
+    });
+    
+    if (checkedCount === 0) {
+        alert('Please select a template before continuing.');
+        return;
+    }
+    
+    if (checkedCount > 1) {
+        alert('Multiple templates selected. Please refresh the page and try again.');
+        return;
+    }
+    
+    const validValues = ['traditional', 'modern', 'hybrid'];
+    if (!validValues.includes(selectedTemplate)) {
+        alert('Invalid template selection. Please try again.');
+        return;
+    }
+    
+    // Show confirmation dialog
+    const confirmMessage = `You selected the ${selectedTemplate.toUpperCase()} template.\n\nProceed with ${selectedTemplate.toUpperCase()} template?`;
+    
+    if (confirm(confirmMessage)) {
+        // Submit the form normally
+        this.submit();
+    }
+});
+</script>
+{% endblock %}

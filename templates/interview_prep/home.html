@@ -1,0 +1,315 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Interview Preparation - Resume AI Optimizer{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body p-5">
+                    <h1 class="text-center mb-4">
+                        <i class="fas fa-comments me-2"></i>Interview Preparation
+                    </h1>
+                    <p class="lead text-center text-muted mb-5">
+                        Get personalized interview tips and practice with our AI coach to ace your interviews.
+                    </p>
+                    
+                    <!-- Progress Section -->
+                    {% if recent_sessions %}
+                        {% with recent_sessions.0 as session %}
+                        <div class="row mb-5">
+                            <div class="col-md-4">
+                                <div class="card bg-primary text-white text-center">
+                                    <div class="card-body">
+                                        <h3>Level {{ session.current_level|default:1 }}</h3>
+                                        <p class="mb-0">Current Level</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card bg-success text-white text-center">
+                                    <div class="card-body">
+                                        <h3>{{ session.tips_completed|default:0 }}/{{ session.total_tips|default:0 }}</h3>
+                                        <p class="mb-0">Tips Completed</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card bg-info text-white text-center">
+                                    <div class="card-body">
+                                        <h3>{{ session.get_progress_percentage|default:0 }}%</h3>
+                                        <p class="mb-0">Progress</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endwith %}
+                    {% else %}
+                        <div class="row mb-5">
+                            <div class="col-md-4">
+                                <div class="card bg-primary text-white text-center">
+                                    <div class="card-body">
+                                        <h3>Level {{ current_level }}</h3>
+                                        <p class="mb-0">Current Level</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card bg-success text-white text-center">
+                                    <div class="card-body">
+                                        {% with l1_completed=0 l2_completed=0 l3_completed=0 %}
+                                        {% for tip in level_1_tips %}{% if tip.is_completed %}{% with l1_completed=l1_completed|add:1 %}{% endwith %}{% endif %}{% endfor %}
+                                        {% for tip in level_2_tips %}{% if tip.is_completed %}{% with l2_completed=l2_completed|add:1 %}{% endwith %}{% endif %}{% endfor %}
+                                        {% for tip in level_3_tips %}{% if tip.is_completed %}{% with l3_completed=l3_completed|add:1 %}{% endwith %}{% endif %}{% endfor %}
+                                        {% with total_completed=l1_completed|add:l2_completed|add:l3_completed %}
+                                        {% with total_tips=level_1_tips|length|add:level_2_tips|length|add:level_3_tips|length %}
+                                        <h3>{{ total_completed }}/{{ total_tips }}</h3>
+                                        {% endwith %}
+                                        {% endwith %}
+                                        {% endwith %}
+                                        <p class="mb-0">Tips Completed</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card bg-info text-white text-center">
+                                    <div class="card-body">
+                                        <h3 class="text-white mb-0">
+                                            {% if level_3_complete %}100%
+                                            {% elif level_2_complete %}67%
+                                            {% elif level_1_complete %}33%
+                                            {% else %}0%{% endif %}
+                                        </h3>
+                                        <p class="mb-0">Progress</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    
+                    <!-- Single Generate Button -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5><i class="fas fa-brain me-2"></i>{{ next_action }}</h5>
+                        </div>
+                        <div class="card-body text-center">
+                            {% if next_action == "Generate Level 1 Tips" %}
+                                <form method="post" action="{% url 'interview_prep:generate_tips' %}" style="display: inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-lightbulb me-2"></i>{{ next_action }}
+                                    </button>
+                                </form>
+                            {% elif next_action == "Congratulations! Good luck with your interview!" %}
+                                <div class="alert alert-success text-center">
+                                    <i class="fas fa-trophy me-2"></i>{{ next_action }}
+                                </div>
+                            {% else %}
+                                <div class="alert alert-info text-center">
+                                    <i class="fas fa-info-circle me-2"></i>{{ next_action }}
+                                </div>
+                            {% endif %}
+                            {% if show_unlock_button %}
+                                <p class="text-success mb-3"><i class="fas fa-check-circle me-2"></i>{{ next_action }}</p>
+                                <form method="post" action="{% url 'interview_prep:unlock_level' %}" style="display: inline;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="level" value="{{ unlock_level }}">
+                                    <button type="submit" class="btn btn-warning btn-lg">
+                                        <i class="fas fa-unlock me-2"></i>Unlock Level {{ unlock_level }} Tips
+                                    </button>
+                                </form>
+                            {% else %}
+                                <p class="text-muted mb-3">{{ next_action }}</p>
+                                <small class="text-info">Check off all current level tips to unlock the next level.</small>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- Level 1 Tips -->
+                    {% if level_1_tips %}
+                        <div class="card mb-4 {% if level_1_complete %}border-success{% endif %}">
+                            <div class="card-header bg-primary text-white">
+                                <h5><i class="fas fa-star me-2"></i>Level 1 Tips {% if level_1_complete %}<i class="fas fa-check-circle ms-2"></i>{% endif %}</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="tips-list">
+                                    {% for tip in level_1_tips %}
+                                    <div class="card mb-2 {% if tip.is_completed %}border-success{% endif %}">
+                                        <div class="card-body py-2">
+                                            <div class="form-check d-flex align-items-start">
+                                                <input class="form-check-input me-3 mt-1" type="checkbox" 
+                                                       id="tip{{ tip.id }}" 
+                                                       {% if tip.is_completed %}checked{% endif %}
+                                                       data-tip-id="{{ tip.id }}">
+                                                <div class="flex-grow-1">
+                                                    <label class="form-check-label {% if tip.is_completed %}text-decoration-line-through text-muted{% endif %}" 
+                                                           for="tip{{ tip.id }}">
+                                                        <i class="fas fa-lightbulb me-2 text-primary"></i>
+                                                        {{ tip.tip_content }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <!-- Level 2 Tips -->
+                    {% if level_2_tips %}
+                        <div class="card mb-4 {% if level_2_complete %}border-success{% endif %}">
+                            <div class="card-header bg-warning text-dark">
+                                <h5><i class="fas fa-star me-2"></i>Level 2 Tips {% if level_2_complete %}<i class="fas fa-check-circle ms-2"></i>{% endif %}</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="tips-list">
+                                    {% for tip in level_2_tips %}
+                                    <div class="card mb-2 {% if tip.is_completed %}border-success{% endif %}">
+                                        <div class="card-body py-2">
+                                            <div class="form-check d-flex align-items-start">
+                                                <input class="form-check-input me-3 mt-1" type="checkbox" 
+                                                       id="tip{{ tip.id }}" 
+                                                       {% if tip.is_completed %}checked{% endif %}
+                                                       data-tip-id="{{ tip.id }}">
+                                                <div class="flex-grow-1">
+                                                    <label class="form-check-label {% if tip.is_completed %}text-decoration-line-through text-muted{% endif %}" 
+                                                           for="tip{{ tip.id }}">
+                                                        <i class="fas fa-star me-2 text-warning"></i>
+                                                        {{ tip.tip_content }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <!-- Level 3 Tips -->
+                    {% if level_3_tips %}
+                        <div class="card mb-4">
+                            <div class="card-header bg-success text-white">
+                                <h5><i class="fas fa-trophy me-2"></i>Level 3 Tips</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="tips-list">
+                                    {% for tip in level_3_tips %}
+                                    <div class="card mb-2 {% if tip.is_completed %}border-success{% endif %}">
+                                        <div class="card-body py-2">
+                                            <div class="form-check d-flex align-items-start">
+                                                <input class="form-check-input me-3 mt-1" type="checkbox" 
+                                                       id="tip{{ tip.id }}" 
+                                                       {% if tip.is_completed %}checked{% endif %}
+                                                       data-tip-id="{{ tip.id }}">
+                                                <div class="flex-grow-1">
+                                                    <label class="form-check-label {% if tip.is_completed %}text-decoration-line-through text-muted{% endif %}" 
+                                                           for="tip{{ tip.id }}">
+                                                        <i class="fas fa-trophy me-2 text-success"></i>
+                                                        {{ tip.tip_content }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if not level_1_tips and not level_2_tips and not level_3_tips %}
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            No tips generated yet. Click "Generate Level 1" to get started!
+                        </div>
+                    {% endif %}
+                    
+                    <!-- Action Buttons -->
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <a href="{% url 'interview_prep:chat' %}" class="btn btn-info w-100">
+                                <i class="fas fa-robot me-2"></i>Chat with AI Coach
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="{% url 'interview_prep:download_tips' %}" class="btn btn-success w-100">
+                                <i class="fas fa-download me-2"></i>Download Tips
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            {% if level_1_tips and not level_2_tips %}
+                                <form method="post" action="{% url 'interview_prep:unlock_level' %}" style="display: inline;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="level" value="2">
+                                    <button type="submit" class="btn btn-warning w-100">
+                                        <i class="fas fa-unlock me-2"></i>Unlock Next Level
+                                    </button>
+                                </form>
+                            {% elif level_2_tips and not level_3_tips %}
+                                <form method="post" action="{% url 'interview_prep:unlock_level' %}" style="display: inline;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="level" value="3">
+                                    <button type="submit" class="btn btn-warning w-100">
+                                        <i class="fas fa-unlock me-2"></i>Unlock Next Level
+                                    </button>
+                                </form>
+                            {% elif level_3_tips %}
+                                <button class="btn btn-success w-100" onclick="showCongratulations()">
+                                    <i class="fas fa-trophy me-2"></i>All Levels Complete
+                                </button>
+                            {% else %}
+                                <button class="btn btn-secondary w-100" disabled>
+                                    <i class="fas fa-lightbulb me-2"></i>Generate Tips First
+                                </button>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="?clear_tips=1" class="btn btn-danger w-100" onclick="return confirm('This will clear all your interview preparation data. Are you sure?')">
+                                <i class="fas fa-trash me-2"></i>Clear Session
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Event delegation for tip completion buttons
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.tip-complete-btn')) {
+            const button = e.target.closest('.tip-complete-btn');
+            const tipId = button.getAttribute('data-tip-id');
+            markTipCompleted(tipId);
+        }
+    });
+});
+
+function markTipCompleted(tipId) {
+    fetch('/interview/tip/' + tipId + '/complete/', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        }
+    });
+}
+
+function showCongratulations() {
+    alert('🎉 Congratulations! You have completed all interview preparation levels. All the best for your interview! 🎉');
+}
+</script>
+{% endblock %}

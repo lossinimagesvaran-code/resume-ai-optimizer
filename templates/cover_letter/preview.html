@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}Cover Letter Preview - Resume AI Optimizer{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body p-5">
+                    <h1 class="text-center mb-4">
+                        <i class="fas fa-eye me-2"></i>Cover Letter Preview
+                    </h1>
+                    
+                    <div class="mb-4">
+                        <h5>{{ cover_letter.job_title }} at {{ cover_letter.company_name }}</h5>
+                        <p class="text-muted">Tone: {{ cover_letter.tone|title }}</p>
+                    </div>
+                    
+                    <div class="cover-letter-content border p-4 mb-4" style="background: #f8f9fa;">
+                        <pre style="white-space: pre-wrap; font-family: inherit;">{{ cover_letter.cover_letter_content }}</pre>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <a href="{% url 'cover_letter:download' cover_letter.id 'pdf' %}" class="btn btn-primary w-100">
+                                <i class="fas fa-download me-2"></i>Download PDF
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="{% url 'cover_letter:download' cover_letter.id 'txt' %}" class="btn btn-outline-primary w-100">
+                                <i class="fas fa-file-text me-2"></i>Download Text
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="{% url 'cover_letter:edit' cover_letter.id %}" class="btn btn-warning w-100">
+                                <i class="fas fa-edit me-2"></i>Edit
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="{% url 'cover_letter:home' %}" class="btn btn-outline-secondary w-100">
+                                <i class="fas fa-plus me-2"></i>Create New
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

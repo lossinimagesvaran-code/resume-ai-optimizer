@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}Analysis History - Resume AI Optimizer{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body p-5">
+                    <h1 class="text-center mb-4">
+                        <i class="fas fa-history me-2"></i>Analysis History
+                    </h1>
+                    
+                    {% if analyses %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-primary">
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Match Score</th>
+                                        <th>Job Description</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for analysis in analyses %}
+                                    <tr>
+                                        <td>{{ analysis.created_at|date:"M d, Y" }}</td>
+                                        <td>
+                                            <span class="badge {% if analysis.match_score >= 80 %}bg-success{% elif analysis.match_score >= 60 %}bg-warning{% else %}bg-danger{% endif %}">
+                                                {{ analysis.match_score }}%
+                                            </span>
+                                        </td>
+                                        <td>{{ analysis.job_description|truncatechars:50 }}</td>
+                                        <td>
+                                            <a href="{% url 'resume_analysis:results' analysis.id %}" class="btn btn-sm btn-primary">
+                                                <i class="fas fa-eye me-1"></i>View
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                            <h3>No Analysis History</h3>
+                            <p class="text-muted">You haven't performed any resume analysis yet.</p>
+                            <a href="{% url 'resume_analysis:home' %}" class="btn btn-primary">
+                                <i class="fas fa-plus me-2"></i>Start Analysis
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
